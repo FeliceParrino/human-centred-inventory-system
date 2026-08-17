@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Profile — Inventory System</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='CSS/style.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='CSS/dashboard.css') }}">
+</head>
+<body>
+  <nav class="navbar">
+    <div class="navbar-left">
+      <a href="/dashboard" class="logo logo-sm">Inventory<span>.</span></a>
+      <details class="nav-menu">
+        <summary class="btn btn-secondary nav-menu-btn">Menu</summary>
+        <div class="nav-menu-list">
+          <a href="/dashboard">Dashboard</a>
+          <a href="/manage_inventory">Manage Inventory</a>
+          <a href="/stock_report">Stock Report</a>
+          <a href="/profile">Profile</a>
+        </div>
+      </details>
+    </div>
+    <div class="navbar-right">
+      <span>{{ username }}</span>
+      <a href="/logout" class="btn btn-secondary">Logout</a>
+    </div>
+  </nav>
+
+  <main class="main-content">
+    <h1 class="page-title">User Profile</h1>
+    <p class="page-subtitle">Logged-in user information and inventory activity summary.</p>
+
+    <section class="profile-grid">
+      <div class="card profile-card">
+        <div class="card-label label-purchase">Account</div>
+        <h3>{{ user.fullName or username }}</h3>
+        <div class="profile-row">
+          <span>User ID</span>
+          <strong>{{ user.userID }}</strong>
+        </div>
+        <div class="profile-row">
+          <span>Username</span>
+          <strong>{{ user.username }}</strong>
+        </div>
+        <div class="profile-row">
+          <span>Email</span>
+          <strong>{{ user.email or 'Not provided' }}</strong>
+        </div>
+        <div class="profile-row">
+          <span>Business</span>
+          <strong>{{ user.businessName or 'Not provided' }}</strong>
+        </div>
+        <div class="profile-row">
+          <span>Business Type</span>
+          <strong>{{ user.businessType or 'Not provided' }}</strong>
+        </div>
+      </div>
+
+      <div class="card profile-card">
+        <div class="card-label label-report">Privacy</div>
+        <h3>Data Protection</h3>
+        <div class="profile-row">
+          <span>Privacy Accepted</span>
+          <strong>{% if user.privacyConsent %}Yes{% else %}No{% endif %}</strong>
+        </div>
+        <div class="profile-row">
+          <span>Accepted At</span>
+          <strong>{{ user.privacyConsentAt or 'Not recorded' }}</strong>
+        </div>
+        <div class="profile-row">
+          <span>Notice Version</span>
+          <strong>{{ user.privacyNoticeVersion or 'Not recorded' }}</strong>
+        </div>
+        <div class="profile-row">
+          <span>Password Reset</span>
+          <strong><a href="/forgot_password">Email reset link</a></strong>
+        </div>
+      </div>
+
+      <div class="card profile-card">
+        <div class="card-label label-category">Inventory</div>
+        <h3>Business Summary</h3>
+        <div class="profile-row">
+          <span>Products</span>
+          <strong>{{ summary.total_products }}</strong>
+        </div>
+        <div class="profile-row">
+          <span>Categories</span>
+          <strong>{{ summary.total_categories }}</strong>
+        </div>
+        <div class="profile-row">
+          <span>Total Stock</span>
+          <strong>{{ summary.total_stock }}</strong>
+        </div>
+        <div class="profile-row">
+          <span>Total Movements</span>
+          <strong>{{ transactions|length }}</strong>
+        </div>
+      </div>
+
+      <div class="card profile-card">
+        <div class="card-label label-report">Stock Value</div>
+        <h3>Current Values</h3>
+        <div class="profile-row">
+          <span>Current Stock Cost</span>
+          <strong>£{{ '%.2f'|format(summary.inventory_cost_value|float) }}</strong>
+        </div>
+        <div class="profile-row">
+          <span>Current Sale Value</span>
+          <strong>£{{ '%.2f'|format(summary.inventory_sale_value|float) }}</strong>
+        </div>
+        <div class="profile-row">
+          <span>Potential Margin</span>
+          <strong>£{{ '%.2f'|format(summary.potential_margin|float) }}</strong>
+        </div>
+      </div>
+    </section>
+
+    <div class="section-title">Categories</div>
+    <div class="table-wrap category-table-wrap">
+      {% if categories %}
+      <table class="category-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Category</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for category in categories %}
+          <tr>
+            <td class="muted-cell">{{ category.categoryID }}</td>
+            <td>{{ category.name }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      {% else %}
+      <div class="empty-state">No categories yet.</div>
+      {% endif %}
+    </div>
+  </main>
+</body>
+</html>

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Edit Category — Inventory System</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='CSS/style.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='CSS/dashboard.css') }}">
+</head>
+<body>
+  <nav class="navbar">
+    <div class="navbar-left">
+      <a href="/dashboard" class="logo logo-sm">Inventory<span>.</span></a>
+      <details class="nav-menu">
+        <summary class="btn btn-secondary nav-menu-btn">Menu</summary>
+        <div class="nav-menu-list">
+          <a href="/dashboard">Dashboard</a>
+          <a href="/manage_inventory">Manage Inventory</a>
+          <a href="/stock_report">Stock Report</a>
+          <a href="/profile">Profile</a>
+        </div>
+      </details>
+    </div>
+    <div class="navbar-right">
+      <span>{{ username }}</span>
+      <a href="/manage_inventory" class="btn btn-secondary">Back</a>
+    </div>
+  </nav>
+
+  <main class="main-content narrow-content">
+    <h1 class="page-title">Edit Category</h1>
+    <p class="page-subtitle">Rename a category used to organise products for a specific business type.</p>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="flash flash-{{ category }}">{{ message }}</div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    <div class="card">
+      <div class="card-label label-category">Category</div>
+      <h3>{{ category.name }}</h3>
+      <form method="POST" action="{{ url_for('edit_category', categoryID=category.categoryID) }}">
+        <div class="form-group">
+          <label class="form-label" for="name">Category name</label>
+          <input class="form-input" type="text" id="name" name="name" value="{{ category.name }}" required>
+        </div>
+        <button type="submit" class="btn btn-category">Save Category</button>
+      </form>
+    </div>
+  </main>
+</body>
+</html>

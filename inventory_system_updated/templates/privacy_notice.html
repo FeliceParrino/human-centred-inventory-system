@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Privacy Notice — Inventory System</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='CSS/style.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='CSS/dashboard.css') }}">
+</head>
+<body>
+  <main class="main-content narrow-content">
+    <a href="/register" class="logo logo-sm">Inventory<span>.</span></a>
+    <h1 class="page-title privacy-title">Privacy Notice</h1>
+    <p class="page-subtitle">Version: {{ privacy_version }}</p>
+
+    <div class="card">
+      <div class="card-label label-report">UK GDPR</div>
+      <h3>How this project uses personal data</h3>
+      <p>This student project collects only the personal information needed to create an account, identify the logged-in user, connect the account to a small business profile, and support password reset.</p>
+      <p><strong>Data collected:</strong> username, full name, email, business name, business type, password hash, and privacy consent timestamp.</p>
+      <p><strong>Purpose:</strong> account access, inventory ownership, profile display, and password reset.</p>
+      <p><strong>Security:</strong> passwords are stored as hashes. Password reset tokens are stored as hashes and expire after 30 minutes.</p>
+      <p><strong>Your rights:</strong> UK GDPR includes rights such as being informed, access, rectification, erasure, restriction, objection, and complaint to the ICO.</p>
+      <p>This notice supports transparency and data minimisation, but a live business deployment still needs a complete privacy policy, retention policy, data controller details, and operational procedures.</p>
+    </div>
+  </main>
+</body>
+</html>

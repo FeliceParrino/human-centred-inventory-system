@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Edit Product — Inventory System</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='CSS/style.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='CSS/dashboard.css') }}">
+</head>
+<body>
+  <nav class="navbar">
+    <div class="navbar-left">
+      <a href="/dashboard" class="logo logo-sm">Inventory<span>.</span></a>
+      <details class="nav-menu">
+        <summary class="btn btn-secondary nav-menu-btn">Menu</summary>
+        <div class="nav-menu-list">
+          <a href="/dashboard">Dashboard</a>
+          <a href="/manage_inventory">Manage Inventory</a>
+          <a href="/stock_report">Stock Report</a>
+          <a href="/profile">Profile</a>
+        </div>
+      </details>
+    </div>
+    <div class="navbar-right">
+      <span>{{ username }}</span>
+      <a href="/manage_inventory" class="btn btn-secondary">Back</a>
+    </div>
+  </nav>
+
+  <main class="main-content narrow-content">
+    <h1 class="page-title">Edit Product</h1>
+    <p class="page-subtitle">Update product details and prices. Stock quantity is managed through restock and sale actions.</p>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="flash flash-{{ category }}">{{ message }}</div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    <div class="card">
+      <div class="card-label label-purchase">Product</div>
+      <h3>{{ product.name }}</h3>
+      <form method="POST" action="{{ url_for('edit_product', productID=product.productID) }}">
+        <div class="form-group">
+          <label class="form-label" for="name">Product name</label>
+          <input class="form-input" type="text" id="name" name="name" value="{{ product.name }}" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="categoryID">Category</label>
+          <select class="form-input" id="categoryID" name="categoryID">
+            <option value="">No category</option>
+            {% for category in categories %}
+              <option value="{{ category.categoryID }}" {% if product.categoryID == category.categoryID %}selected{% endif %}>{{ category.name }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="form-group split-inputs two-inputs">
+          <div>
+            <label class="form-label" for="costPrice">Cost price</label>
+            <input class="form-input" type="number" id="costPrice" name="costPrice" min="0" step="0.01" value="{{ '%.2f'|format(product.costPrice|float) }}">
+          </div>
+          <div>
+            <label class="form-label" for="salePrice">Sale price</label>
+            <input class="form-input" type="number" id="salePrice" name="salePrice" min="0" step="0.01" value="{{ '%.2f'|format(product.salePrice|float) }}">
+          </div>
+        </div>
+        <button type="submit" class="btn btn-primary">Save Product</button>
+      </form>
+    </div>
+  </main>
+</body>
+</html>

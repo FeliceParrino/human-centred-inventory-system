@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Register — Inventory System</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='CSS/style.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='CSS/register.css') }}">
+  <script src="{{ url_for('static', filename='js/register.js') }}"></script>
+
+</head>
+<body>
+
+  <div class="register-wrapper">
+    <div class="register-card">
+    <div class="auth-header">
+        <div class="logo logo-lg">Inventory<span>.</span></div>
+        <p class="auth-subtitle">Manage your stock in a simple and efficient way.</p>
+    </div>
+      <h1>Create account</h1>
+      <p class="subtitle">Register to access the inventory system.</p>
+
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          {% for category, message in messages %}
+            <div class="flash flash-{{ category }}">{{ message }}</div>
+          {% endfor %}
+        {% endif %}
+      {% endwith %}
+
+      {% if error %}
+        <div class="flash flash-error">{{ error }}</div>
+      {% endif %}
+
+      <form method="POST" action="/register">
+        <div class="form-group">
+          <label class="form-label" for="username">Username</label>
+          <input class="form-input" type="text" id="username" name="username" placeholder="Choose a username" value="{{ form_data.username if form_data else '' }}" required autofocus>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="fullName">Full name</label>
+          <input class="form-input" type="text" id="fullName" name="fullName" placeholder="Your full name" value="{{ form_data.fullName if form_data else '' }}" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="email">Email</label>
+          <input class="form-input" type="email" id="email" name="email" placeholder="you@example.com" value="{{ form_data.email if form_data else '' }}" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="businessName">Business name</label>
+          <input class="form-input" type="text" id="businessName" name="businessName" placeholder="Business name" value="{{ form_data.businessName if form_data else '' }}" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="businessType">Business type <span class="optional-label">Optional</span></label>
+          <input class="form-input" type="text" id="businessType" name="businessType" placeholder="e.g. retail, clothing, electronics" value="{{ form_data.businessType if form_data else '' }}">
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="password">Password</label>
+          <input class="form-input" type="password" id="password" name="password" placeholder="••••••••" required oninput="checkStrength(this.value)">
+          <div class="strength-bar"><div class="strength-fill" id="strengthFill"></div></div>
+          <div class="strength-label" id="strengthLabel"></div>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="confirmPassword">Confirm password</label>
+          <input class="form-input" type="password" id="confirmPassword" name="confirmPassword" placeholder="••••••••" required>
+        </div>
+        <label class="privacy-check">
+          <input type="checkbox" name="privacyConsent" {% if form_data and form_data.privacyConsent %}checked{% endif %} required>
+          <span>I have read and agree to the <a href="/privacy_notice" target="_blank">privacy notice</a>. I understand my data is used to create my account, operate the inventory system, and support password reset.</span>
+        </label>
+        <button type="submit" class="btn btn-primary">Register</button>
+      </form>
+
+      <div class="register-footer">
+        Already have an account? <a href="/login">Sign in</a>
+      </div>
+
+    </div>
+  </div>
+
+</body>
+</html>

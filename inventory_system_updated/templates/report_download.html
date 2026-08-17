@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Inventory Report</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      color: #202124;
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 13px;
+      line-height: 1.5;
+      margin: 0;
+      padding: 32px;
+    }
+
+    .report-header {
+      align-items: flex-start;
+      border-bottom: 2px solid #4f8ef7;
+      display: flex;
+      justify-content: space-between;
+      gap: 24px;
+      margin-bottom: 24px;
+      padding-bottom: 18px;
+    }
+
+    .logo {
+      color: #111;
+      font-size: 28px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+
+    .logo span {
+      color: #4f8ef7;
+    }
+
+    .report-title {
+      color: #555;
+      margin: 0;
+    }
+
+    .report-meta {
+      color: #555;
+      min-width: 220px;
+      text-align: right;
+    }
+
+    .report-meta strong {
+      color: #202124;
+    }
+
+    .summary {
+      background: #f3f6fb;
+      border: 1px solid #d8e2f3;
+      border-radius: 6px;
+      display: grid;
+      gap: 12px;
+      grid-template-columns: repeat(3, 1fr);
+      margin-bottom: 24px;
+      padding: 14px;
+    }
+
+    .summary-label {
+      color: #6b7280;
+      display: block;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .summary-value {
+      color: #111827;
+      display: block;
+      font-size: 15px;
+      font-weight: 700;
+      margin-top: 3px;
+    }
+
+    table {
+      border-collapse: collapse;
+      width: 100%;
+    }
+
+    th {
+      background: #f3f4f6;
+      border: 1px solid #d1d5db;
+      color: #4b5563;
+      font-size: 11px;
+      letter-spacing: 0.04em;
+      padding: 9px;
+      text-align: left;
+      text-transform: uppercase;
+    }
+
+    td {
+      border: 1px solid #d1d5db;
+      padding: 9px;
+      vertical-align: top;
+    }
+
+    .badge {
+      border-radius: 4px;
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 2px 8px;
+      text-transform: uppercase;
+    }
+
+    .type-purchase { background: #e8f0ff; color: #2f63bd; }
+    .type-restock { background: #fff0dc; color: #9a5b18; }
+    .type-sell { background: #ffe7e7; color: #ad3030; }
+    .type-delete { background: #f4e4ec; color: #8f2d56; }
+
+    .muted {
+      color: #6b7280;
+    }
+
+    .empty-state {
+      border: 1px dashed #cbd5e1;
+      border-radius: 6px;
+      color: #6b7280;
+      padding: 28px;
+      text-align: center;
+    }
+
+    @media print {
+      body {
+        padding: 18px;
+      }
+
+      .report-header,
+      .summary {
+        break-inside: avoid;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="report-header">
+    <div>
+      <div class="logo">Inventory<span>.</span></div>
+      <p class="report-title">Stock Report for Small Business Inventory Management</p>
+    </div>
+    <div class="report-meta">
+      <div><strong>Generated:</strong> {{ generated_at }}</div>
+      <div><strong>User:</strong> {{ username }}</div>
+      <div><strong>Date range:</strong> {{ report_range }}</div>
+    </div>
+  </header>
+
+  <section class="summary">
+    <div>
+      <span class="summary-label">Report Period</span>
+      <span class="summary-value">{{ report_range }}</span>
+    </div>
+    <div>
+      <span class="summary-label">Transactions</span>
+      <span class="summary-value">{{ transactions | length }}</span>
+    </div>
+    <div>
+      <span class="summary-label">System</span>
+      <span class="summary-value">Inventory.</span>
+    </div>
+  </section>
+
+  {% if transactions %}
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Type</th>
+        <th>Category</th>
+        <th>Product</th>
+        <th>Units</th>
+        <th>Value</th>
+        <th>User</th>
+        <th>Timestamp</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for t in transactions %}
+      <tr>
+        <td class="muted">{{ t.transactionID }}</td>
+        <td><span class="badge type-{{ t.type }}">{{ t.type }}</span></td>
+        <td>{{ t.categoryName or 'Uncategorised' }}</td>
+        <td>{{ t.name }}</td>
+        <td>{% if t.amount is not none and t.amount != '' %}{{ t.amount }} units{% else %}-{% endif %}</td>
+        <td>£{{ '%.2f'|format(t.totalValue|float) }}</td>
+        <td class="muted">{{ t.username }}</td>
+        <td class="muted">{{ t.timestamp }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <div class="empty-state">No transactions found for this report period.</div>
+  {% endif %}
+</body>
+</html>

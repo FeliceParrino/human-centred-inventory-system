@@ -1,0 +1,13 @@
+SECRET_KEY=your-secret-key-here
+
+DB_HOST=localhost
+DB_USER=root
+DB_PASSWORD=your-database-password
+DB_PORT=3306
+DB_NAME=retail_inventory_2
+
+SMTP_HOST=smtp.example.com
+SMTP_PORT=587
+SMTP_USER=your-email@example.com
+SMTP_PASSWORD=your-email-password
+SMTP_FROM=your-email@example.com

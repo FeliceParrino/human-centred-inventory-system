@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login — Inventory System</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='CSS/style.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='CSS/login.css') }}">
+</head>
+<body>
+
+  <div class="login-wrapper">
+    <div class="login-card">
+
+    <div class="auth-header">
+      <div class="logo logo-lg">Inventory<span>.</span></div>
+      <p class="auth-subtitle">Manage your stock in a simple and efficient way.</p>
+    </div>
+
+      <h2>Sign in</h2>
+      <p class="subtitle">Enter your credentials to access the system.</p>
+
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          {% for category, message in messages %}
+            <div class="flash flash-{{ category }}">{{ message }}</div>
+          {% endfor %}
+        {% endif %}
+      {% endwith %}
+
+      {% if error %}
+        <div class="flash flash-error">{{ error }}</div>
+      {% endif %}
+
+      <form method="POST" action="/login">
+        <div class="form-group">
+          <label class="form-label" for="username">Username</label>
+          <input class="form-input" type="text" id="username" name="username" placeholder="Username" required autofocus>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="password">Password</label>
+          <input class="form-input" type="password" id="password" name="password" placeholder="••••••••" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Sign In</button>
+      </form>
+
+      <div class="login-footer">
+        Don't have an account? <a href="/register">Register</a>
+        <br>
+        <a href="/forgot_password">Forgot password?</a>
+      </div>
+
+    </div>
+  </div>
+
+</body>
+</html>

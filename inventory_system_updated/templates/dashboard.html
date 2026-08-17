@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard — Inventory System</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='CSS/style.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='CSS/dashboard.css') }}">
+</head>
+<body>
+
+  <nav class="navbar">
+    <div class="navbar-left">
+      <a href="/dashboard" class="logo logo-sm">Inventory<span>.</span></a>
+      <details class="nav-menu">
+        <summary class="btn btn-secondary nav-menu-btn">Menu</summary>
+        <div class="nav-menu-list">
+          <a href="/dashboard">Dashboard</a>
+          <a href="/manage_inventory">Manage Inventory</a>
+          <a href="/stock_report">Stock Report</a>
+          <a href="/profile">Profile</a>
+        </div>
+      </details>
+    </div>
+    <div class="navbar-right">
+      <span>{{ username }}</span>
+      <a href="/logout" class="btn btn-secondary">Logout</a>
+    </div>
+  </nav>
+
+  <main class="main-content">
+
+    <div class="page-heading">
+      <div>
+        <h1 class="page-title">Business Dashboard</h1>
+        <p class="page-subtitle">A quick overview of products, stock movements, sales, and restock costs.</p>
+      </div>
+      <a href="/manage_inventory" class="btn btn-primary page-action">Manage Inventory</a>
+    </div>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="flash flash-{{ category }}">{{ message }}</div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    <section class="summary-grid">
+      <div class="summary-card">
+        <span class="summary-label">Products</span>
+        <strong>{{ summary.total_products }}</strong>
+        <span class="summary-note">{{ summary.total_stock }} units in stock</span>
+      </div>
+      <div class="summary-card">
+        <span class="summary-label">Categories</span>
+        <strong>{{ summary.total_categories }}</strong>
+        <span class="summary-note">Custom business groups</span>
+      </div>
+      <div class="summary-card">
+        <span class="summary-label">Low Stock</span>
+        <strong>{{ summary.low_stock }}</strong>
+        <span class="summary-note">Products at 5 units or less</span>
+      </div>
+      <div class="summary-card">
+        <span class="summary-label">Movements</span>
+        <strong>{{ summary.movement_count }}</strong>
+        <span class="summary-note">Purchases, sales, restocks, deletes</span>
+      </div>
+    </section>
+
+    <section class="money-grid">
+      <div class="money-card money-stock-cost">
+        <span class="summary-label">Current Stock Cost</span>
+        <strong>£{{ '%.2f'|format(summary.inventory_cost_value|float) }}</strong>
+      </div>
+      <div class="money-card money-stock-sale">
+        <span class="summary-label">Current Sale Value</span>
+        <strong>£{{ '%.2f'|format(summary.inventory_sale_value|float) }}</strong>
+      </div>
+      <div class="money-card money-margin">
+        <span class="summary-label">Potential Margin</span>
+        <strong>£{{ '%.2f'|format(summary.potential_margin|float) }}</strong>
+      </div>
+      <div class="money-card money-sales">
+        <span class="summary-label">Sales Revenue</span>
+        <strong>£{{ '%.2f'|format(summary.sales_value|float) }}</strong>
+      </div>
+      <div class="money-card money-restock">
+        <span class="summary-label">Restock Spend</span>
+        <strong>£{{ '%.2f'|format(summary.restock_value|float) }}</strong>
+      </div>
+      <div class="money-card money-net">
+        <span class="summary-label">Net Movement</span>
+        <strong>£{{ '%.2f'|format(summary.net_value|float) }}</strong>
+      </div>
+    </section>
+
+    <section class="dashboard-panels">
+      <div class="panel">
+        <div class="section-title">Stock Movements</div>
+        <div class="bar-list">
+          {% for movement in summary.movement_types %}
+          <div class="bar-row">
+            <div class="bar-meta">
+              <span>{{ movement.label }}</span>
+              <strong>{{ movement.count }}</strong>
+            </div>
+            <div class="bar-track">
+              <div class="bar-fill" style="--bar-width: {{ movement.width }}%; --bar-color: {{ movement.color }};"></div>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="section-title">Stock by Category</div>
+        {% if summary.category_chart %}
+        <div class="bar-list">
+          {% for category in summary.category_chart %}
+          <div class="bar-row">
+            <div class="bar-meta">
+              <span>{{ category.label }}</span>
+              <strong>{{ category.stock }}</strong>
+            </div>
+            <div class="bar-track">
+              <div class="bar-fill" style="--bar-width: {{ category.width }}%; --bar-color: #b18cff;"></div>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+        {% else %}
+        <div class="empty-state compact-empty">No stock data yet.</div>
+        {% endif %}
+      </div>
+    </section>
+
+    <div class="section-title">Current Inventory</div>
+    <div class="table-wrap">
+      {% if products %}
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Category</th>
+            <th>Product Name</th>
+            <th>Stock</th>
+            <th>Cost</th>
+            <th>Sale Price</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for p in products %}
+          <tr>
+            <td class="muted-cell">{{ p.productID }}</td>
+            <td>
+              {% if p.categoryName %}
+                <span class="category-pill">{{ p.categoryName }}</span>
+              {% else %}
+                <span class="category-pill category-pill-empty">Uncategorised</span>
+              {% endif %}
+            </td>
+            <td>{{ p.name }}</td>
+            <td>
+              <span class="badge {% if p.stock | int > 5 %}badge-ok{% else %}badge-low{% endif %}">
+                {{ p.stock }} units
+              </span>
+              {% if p.stock | int <= 5 %}
+                <span class="low-stock-note">Low stock</span>
+              {% endif %}
+            </td>
+            <td class="muted-cell">£{{ '%.2f'|format(p.costPrice|float) }}</td>
+            <td class="muted-cell">£{{ '%.2f'|format(p.salePrice|float) }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      {% else %}
+      <div class="empty-state">No products yet — add your first one in Manage Inventory.</div>
+      {% endif %}
+    </div>
+
+  </main>
+</body>
+</html>

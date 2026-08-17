@@ -1,0 +1,82 @@
+/* register.css */
+
+.register-wrapper {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: clamp(16px, 5vw, 24px);
+}
+
+.register-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    width: 100%;
+    max-width: 520px;
+    padding: clamp(28px, 7vw, 40px) clamp(20px, 6vw, 36px);
+}
+
+.privacy-check {
+    align-items: flex-start;
+    color: var(--text-muted);
+    display: flex;
+    gap: 10px;
+    font-size: 12px;
+    line-height: 1.5;
+    margin: 18px 0;
+}
+
+.privacy-check input {
+    margin-top: 3px;
+    flex: 0 0 auto;
+}
+
+.register-card h1 {
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 6px;
+}
+
+.register-card .subtitle {
+    color: var(--text-muted);
+    font-size: 13px;
+    margin-bottom: 28px;
+}
+
+.register-footer {
+    margin-top: 20px;
+    text-align: center;
+    font-size: 13px;
+    color: var(--text-muted);
+}
+
+.optional-label {
+    color: var(--text-muted);
+    font-size: 11px;
+    font-weight: 500;
+    margin-left: 4px;
+}
+
+/* Password strength 
+.strength-bar {
+    height: 3px;
+    background: var(--border);
+    border-radius: 2px;
+    margin-top: 8px;
+    overflow: hidden;
+}
+
+.strength-fill {
+    height: 100%;
+    width: 0%;
+    border-radius: 2px;
+    transition: width 0.3s, background 0.3s;
+}
+
+.strength-label {
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-top: 4px;
+    min-height: 16px;
+} */

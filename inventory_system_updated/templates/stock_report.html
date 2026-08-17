@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Stock Report — Inventory System</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='CSS/style.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='CSS/stock_report.css') }}">
+</head>
+<body>
+
+  <nav class="navbar">
+    <div class="navbar-left">
+      <a href="/dashboard" class="logo logo-sm">Inventory<span>.</span></a>
+      <details class="nav-menu">
+        <summary class="btn btn-secondary nav-menu-btn">Menu</summary>
+        <div class="nav-menu-list">
+          <a href="/dashboard">Dashboard</a>
+          <a href="/manage_inventory">Manage Inventory</a>
+          <a href="/stock_report">Stock Report</a>
+          <a href="/profile">Profile</a>
+        </div>
+      </details>
+    </div>
+    <div class="navbar-right">
+      <span>{{ username }}</span>
+      <a href="/dashboard" class="btn btn-secondary nav-btn">Back</a>
+    </div>
+  </nav>
+
+  <div class="main-content">
+
+    <h1 class="page-title">Stock Report</h1>
+    <p class="page-subtitle">Filter transactions by a specific date range.</p>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="flash flash-{{ category }}">{{ message }}</div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    <form class="report-filter" method="GET" action="/stock_report">
+      <div class="filter-group">
+        <label class="form-label" for="start_date">Start date</label>
+        <div class="date-picker" data-date-picker>
+          <input type="hidden" id="start_date" name="start_date" value="{{ start_date }}" data-date-value>
+          <button class="form-input date-display" type="button" data-date-display>Select start date</button>
+          <div class="date-calendar" data-date-calendar></div>
+        </div>
+      </div>
+      <div class="filter-group">
+        <label class="form-label" for="end_date">End date</label>
+        <div class="date-picker" data-date-picker>
+          <input type="hidden" id="end_date" name="end_date" value="{{ end_date }}" data-date-value>
+          <button class="form-input date-display" type="button" data-date-display>Select end date</button>
+          <div class="date-calendar" data-date-calendar></div>
+        </div>
+      </div>
+      <div class="filter-actions">
+        <button type="submit" class="btn btn-primary filter-btn">Apply Filter</button>
+        <a
+          href="{{ url_for('download_report_pdf', start_date=start_date, end_date=end_date) }}"
+          class="btn btn-success filter-btn"
+        >Download</a>
+        <a href="/stock_report" class="btn btn-secondary filter-btn">Reset</a>
+      </div>
+    </form>
+
+    <div class="table-wrap">
+      {% if transactions %}
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Type</th>
+            <th>Category</th>
+            <th>Product</th>
+            <th>Units</th>
+            <th>Value</th>
+            <th>User</th>
+            <th>User ID</th>
+            <th>Timestamp</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for t in transactions %}
+          <tr>
+            <td class="muted-cell">{{ t.transactionID }}</td>
+            <td>
+              <span class="type-badge type-{{ t.type }}">{{ t.type }}</span>
+            </td>
+            <td>
+              {% if t.categoryName %}
+                <span class="category-pill">{{ t.categoryName }}</span>
+              {% else %}
+                <span class="category-pill category-pill-empty">Uncategorised</span>
+              {% endif %}
+            </td>
+            <td>{{ t.name }}</td>
+            <td>{% if t.amount is not none and t.amount != '' %}{{ t.amount }} units{% else %}-{% endif %}</td>
+            <td class="muted-cell">£{{ '%.2f'|format(t.totalValue|float) }}</td>
+            <td class="muted-cell">{{ t.username }}</td>
+            <td class="muted-cell">{{ t.userID }}</td>
+            <td class="muted-cell">{{ t.timestamp }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      {% else %}
+      <div class="empty-state">No transactions yet.</div>
+      {% endif %}
+    </div>
+
+  </div>
+
+  <script src="{{ url_for('static', filename='js/stock_report.js') }}"></script>
+</body>
+</html>

@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manage Inventory — Inventory System</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='CSS/style.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='CSS/dashboard.css') }}">
+</head>
+<body>
+
+  <nav class="navbar">
+    <div class="navbar-left">
+      <a href="/dashboard" class="logo logo-sm">Inventory<span>.</span></a>
+      <details class="nav-menu">
+        <summary class="btn btn-secondary nav-menu-btn">Menu</summary>
+        <div class="nav-menu-list">
+          <a href="/dashboard">Dashboard</a>
+          <a href="/manage_inventory">Manage Inventory</a>
+          <a href="/stock_report">Stock Report</a>
+          <a href="/profile">Profile</a>
+        </div>
+      </details>
+    </div>
+    <div class="navbar-right">
+      <span>{{ username }}</span>
+      <a href="/logout" class="btn btn-secondary">Logout</a>
+    </div>
+  </nav>
+
+  <main class="main-content">
+
+    <div class="page-heading">
+      <div>
+        <h1 class="page-title">Manage Inventory</h1>
+        <p class="page-subtitle">Add categories, products, restocks, and sales without crowding the dashboard.</p>
+      </div>
+      <a href="/dashboard" class="btn btn-secondary page-action">Back to Dashboard</a>
+    </div>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="flash flash-{{ category }}">{{ message }}</div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    <div class="cards-grid manage-grid">
+
+      <div class="card">
+        <div class="card-label label-category">Category</div>
+        <h3>Add Category</h3>
+        <p>Create business-specific groups such as drinks, accessories, supplies, or services.</p>
+        <form method="POST" action="/add_category">
+          <div class="form-group">
+            <input class="form-input" type="text" name="name" placeholder="Category name" required>
+          </div>
+          <button type="submit" class="btn btn-category">Add Category</button>
+        </form>
+      </div>
+
+      <div class="card">
+        <div class="card-label label-purchase">Product</div>
+        <h3>Add Product</h3>
+        <form method="POST" action="/add_product">
+          <div class="form-group">
+            <input class="form-input" type="text" name="name" placeholder="Product name" required>
+          </div>
+          <div class="form-group">
+            <select class="form-input" name="categoryID">
+              <option value="">No category</option>
+              {% for category in categories %}
+                <option value="{{ category.categoryID }}">{{ category.name }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="form-group split-inputs">
+            <input class="form-input" type="number" name="stock" placeholder="Initial stock" min="1" required>
+            <input class="form-input" type="number" name="costPrice" placeholder="Cost £" min="0" step="0.01">
+            <input class="form-input" type="number" name="salePrice" placeholder="Sale £" min="0" step="0.01">
+          </div>
+          <button type="submit" class="btn btn-primary">Add Product</button>
+        </form>
+      </div>
+
+      <div class="card">
+        <div class="card-label label-restock">Restock</div>
+        <h3>Restock Product</h3>
+        <form method="POST" action="/restock_product">
+          <div class="autocomplete-wrap">
+            <input class="form-input" type="text" id="restock-search" placeholder="Search product..." autocomplete="off">
+            <input type="hidden" name="productID" id="restock-id">
+            <div class="autocomplete-list" id="restock-list"></div>
+          </div>
+          <div class="form-group">
+            <input class="form-input" type="number" name="amount" placeholder="Units to add" min="1" required>
+          </div>
+          <button type="submit" class="btn btn-warning">Restock</button>
+        </form>
+      </div>
+
+      <div class="card">
+        <div class="card-label label-sell">Sell</div>
+        <h3>Sell Product</h3>
+        <form method="POST" action="/sell_product">
+          <div class="autocomplete-wrap">
+            <input class="form-input" type="text" id="sell-search" placeholder="Search product..." autocomplete="off">
+            <input type="hidden" name="productID" id="sell-id">
+            <div class="autocomplete-list" id="sell-list"></div>
+          </div>
+          <div class="form-group">
+            <input class="form-input" type="number" name="amount" placeholder="Quantity to sell" min="1" required>
+          </div>
+          <button type="submit" class="btn btn-danger">Sell</button>
+        </form>
+      </div>
+
+      <div class="card">
+        <div class="card-label label-report">Prices</div>
+        <h3>Update Prices</h3>
+        <form method="POST" action="/update_product_prices">
+          <div class="autocomplete-wrap">
+            <input class="form-input" type="text" id="price-search" placeholder="Search product..." autocomplete="off">
+            <input type="hidden" name="productID" id="price-id">
+            <div class="autocomplete-list" id="price-list"></div>
+          </div>
+          <div class="form-group split-inputs two-inputs">
+            <input class="form-input" type="number" name="costPrice" placeholder="Cost £" min="0" step="0.01">
+            <input class="form-input" type="number" name="salePrice" placeholder="Sale £" min="0" step="0.01">
+          </div>
+          <button type="submit" class="btn btn-success">Update Prices</button>
+        </form>
+      </div>
+
+    </div>
+
+    <div class="section-title">Categories</div>
+    <div class="table-wrap category-table-wrap">
+      {% if categories %}
+      <table class="category-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Category Name</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for category in categories %}
+          <tr>
+            <td class="muted-cell">{{ category.categoryID }}</td>
+            <td>{{ category.name }}</td>
+            <td class="actions-cell">
+              <a href="{{ url_for('edit_category', categoryID=category.categoryID) }}" class="btn btn-secondary edit-btn">Edit</a>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      {% else %}
+      <div class="empty-state">No categories yet.</div>
+      {% endif %}
+    </div>
+
+    <div class="section-title">Current Inventory</div>
+    <div class="table-wrap">
+      {% if products %}
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Category</th>
+            <th>Product Name</th>
+            <th>Stock</th>
+            <th>Cost</th>
+            <th>Sale Price</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for p in products %}
+          <tr>
+            <td class="muted-cell">{{ p.productID }}</td>
+            <td>
+              {% if p.categoryName %}
+                <span class="category-pill">{{ p.categoryName }}</span>
+              {% else %}
+                <span class="category-pill category-pill-empty">Uncategorised</span>
+              {% endif %}
+            </td>
+            <td>{{ p.name }}</td>
+            <td>
+              <span class="badge {% if p.stock | int > 5 %}badge-ok{% else %}badge-low{% endif %}">
+                {{ p.stock }} units
+              </span>
+              {% if p.stock | int <= 5 %}
+                <span class="low-stock-note">Low stock</span>
+              {% endif %}
+            </td>
+            <td class="muted-cell">£{{ '%.2f'|format(p.costPrice|float) }}</td>
+            <td class="muted-cell">£{{ '%.2f'|format(p.salePrice|float) }}</td>
+            <td class="actions-cell">
+              <div class="action-buttons">
+                <a href="{{ url_for('edit_product', productID=p.productID) }}" class="btn btn-secondary edit-btn">Edit</a>
+                <form method="POST" action="/delete_product" class="delete-form" data-product-name="{{ p.name }}">
+                <input type="hidden" name="productID" value="{{ p.productID }}">
+                <button type="submit" class="btn delete-btn">Delete</button>
+                </form>
+              </div>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      {% else %}
+      <div class="empty-state">No products yet — add a category and your first product above.</div>
+      {% endif %}
+    </div>
+
+  </main>
+
+  <script id="product-data" type="application/json">{{ autocomplete_products | tojson }}</script>
+  <script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+</body>
+</html>
