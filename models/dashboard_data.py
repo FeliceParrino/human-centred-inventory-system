@@ -22,8 +22,9 @@ def get_dashboard_summary(userID):
     restock_value = sum(
         Decimal(str(transaction.get('totalValue') or 0))
         for transaction in transactions
-        if transaction['type'] in ('purchase', 'restock')
+        if transaction['type'] == 'restock'
     )
+    
     inventory_cost_value = sum(
         Decimal(str(product.get('costPrice') or 0)) * int(product['stock'] or 0)
         for product in products

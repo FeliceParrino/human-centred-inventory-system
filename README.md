@@ -1,106 +1,137 @@
 # Human-Centred Inventory Management System
 
-A web-based inventory management system designed for small businesses, built with Flask and MySQL.
+![Python](https://img.shields.io/badge/Python-3.x-3776AB?logo=python&logoColor=white)
+![Flask](https://img.shields.io/badge/Flask-Web%20Application-000000?logo=flask&logoColor=white)
+![MySQL](https://img.shields.io/badge/MySQL-Database-4479A1?logo=mysql&logoColor=white)
+![Award](https://img.shields.io/badge/HWID-Best%20Poster%20Award%20%7C%20First%20Place-D4AF37)
+![Copyright](https://img.shields.io/badge/Rights-All%20Rights%20Reserved-lightgrey)
 
-The project focuses on making everyday stock management simpler, clearer, and more efficient while keeping people at the centre of the decision-making process.
+A full-stack inventory management application designed to help small businesses manage stock with less complexity and clearer decision support.
 
-🏆 **Best Poster Award – First Place**
-Presented at the Human Work Interaction Design (HWID) Conference, University of West London.
+Built with **Python, Flask and MySQL**, the system combines product and category management, sales and restock tracking, low-stock warnings, business metrics, privacy-aware user accounts and downloadable transaction reports in one accessible interface.
 
----
+The guiding principle is simple:
 
-## Overview
+> **Technology should support people, not replace their judgement.**
 
-This project was originally developed as a university software development project and later expanded into a more complete human-centred inventory platform for small businesses.
+## Dashboard
 
-The system supports secure account access, product management, category management, stock movements, transaction reporting, pricing, business summaries, and downloadable reports.
+![Business dashboard showing inventory metrics, stock movements and current products](screenshots/dashboard-overview.png)
 
-The current version also introduces a clearer business dashboard with stock values, potential margin, low-stock monitoring, category-based information, and transaction activity.
+The dashboard turns operational data into an immediate business overview, including current stock cost, potential sales value, expected margin, sales revenue, restock spending, low-stock products and category distribution.
 
----
+> The screenshots use fictional demonstration data and do not contain real customer or business information.
 
-## Features
+## Award
 
-* User registration and authentication
-* Password reset by email
-* User and business profiles
-* Privacy consent and UK GDPR notice
-* Product creation and editing
-* Custom product categories
-* Stock purchase and restock management
-* Product sales
-* Low-stock indicators
-* Cost price and sale price management
-* Current stock cost and sale value
-* Potential margin calculation
-* Sales and restock value summaries
-* Transaction history
-* Date-based transaction filtering
-* Downloadable PDF stock reports
-* Responsive dashboard interface
-* Unit testing for core models
+This project was presented as **Human-Centred Retail Inventory Management System for Small Businesses** at the **Human Work Interaction Design (HWID) Conference**, hosted by the University of West London.
 
----
+It received the **Best Poster Award – First Place**.
 
-## Business Dashboard
+The conference project explored how affordable digital tools can reduce cognitive workload, improve stock visibility and help small-business workers make informed decisions while retaining human control.
 
-The dashboard provides a quick overview of:
+## Key Features
 
-* Total products
-* Total stock
-* Product categories
-* Low-stock products
-* Stock movements
-* Current stock cost
-* Current sale value
-* Potential margin
-* Sales revenue
-* Restock spending
+### Inventory and business operations
 
-It also includes visual summaries of stock movements and stock distribution by category.
+- Create and organise custom product categories
+- Add and edit products with cost and sale prices
+- Record initial purchases, sales and restocks
+- Update prices without recreating products
+- Monitor current quantities and low-stock products
+- Review stock distribution by category
+- Track stock cost, potential sale value and expected margin
+- Compare sales revenue with restock spending
 
----
+### Accounts, privacy and reporting
+
+- User registration and secure authentication
+- Password hashing and email-based password reset
+- Business and user profile information
+- Privacy consent with a versioned UK GDPR notice
+- Complete transaction history with timestamps and values
+- Date-range filtering
+- Downloadable PDF stock reports
+- User-specific products, categories and transactions
+
+### Software quality
+
+- Object-oriented domain models
+- Parameterised database queries
+- Environment-based configuration
+- Separation of application, data-access and presentation logic
+- Unit tests for core product, transaction and authentication behaviour
+
+## Application Screens
+
+### Secure access and privacy-aware registration
+
+<table>
+  <tr>
+    <td width="50%" align="center"><strong>Sign in</strong></td>
+    <td width="50%" align="center"><strong>Create an account</strong></td>
+  </tr>
+  <tr>
+    <td><img src="screenshots/login-overview.png" alt="Inventory system sign-in screen"></td>
+    <td><img src="screenshots/registration.png" alt="Account registration with privacy consent"></td>
+  </tr>
+</table>
+
+### Inventory operations
+
+The management workspace keeps frequent actions separate from the dashboard, reducing visual clutter while keeping category creation, product entry, sales, restocks and price updates accessible.
+
+![Inventory management controls for categories, products, restocks, sales and price updates](screenshots/manage-inventory.png)
+
+The inventory table provides clear category labels, cost and sale prices, stock status and visible low-stock warnings.
+
+![Inventory table with product categories, stock levels and edit controls](screenshots/manage-inventory2.png)
+
+### Transaction reporting
+
+![Stock report with date filters, transaction types, values and download option](screenshots/stock-report.png)
+
+### User and business profile
+
+![User profile showing privacy status, business summary and stock values](screenshots/user-profile.png)
+
+## Human-Centred Design
+
+The application was designed around the needs of small-business users who may not have specialist inventory or technical knowledge. Its purpose is to reduce repetitive work and make important information easier to understand, while leaving operational decisions with the user.
+
+The interface applies this approach through:
+
+- Clear navigation and consistent colour-coded actions
+- Simple forms with focused tasks
+- Immediate feedback after inventory operations
+- Visible low-stock warnings
+- Business metrics presented in plain language
+- Separation of the overview dashboard from management controls
+- Privacy information and explicit consent during registration
+
+This direction aligns with **Human Work Interaction Design** and the human-centred principles of **Industry 5.0**.
 
 ## Technology Stack
 
-**Backend**
-
-* Python
-* Flask
-* Object-Oriented Programming
-
-**Database**
-
-* MySQL
-* MySQL Connector for Python
-
-**Frontend**
-
-* HTML
-* CSS
-* JavaScript
-* Jinja2 templates
-
-**Other Tools**
-
-* Werkzeug
-* WeasyPrint
-* python-dotenv
-* unittest
-
----
+| Layer | Technologies |
+|---|---|
+| Backend | Python, Flask, Object-Oriented Programming |
+| Database | MySQL, MySQL Connector for Python |
+| Frontend | HTML, CSS, JavaScript, Jinja2 templates |
+| Security and configuration | Werkzeug, python-dotenv, server-side sessions |
+| Reporting | WeasyPrint, HTML-based PDF generation |
+| Testing | Python `unittest` |
 
 ## Project Structure
 
 ```text
 human-centred-inventory-system/
-│
 ├── app.py
 ├── database.py
 ├── requirements.txt
 ├── .env.example
 ├── .gitignore
-│
+├── README.md
 ├── models/
 │   ├── product.py
 │   ├── transaction.py
@@ -112,7 +143,6 @@ human-centred-inventory-system/
 │   ├── form_utils.py
 │   ├── schema.py
 │   └── pdf_utils.py
-│
 ├── templates/
 │   ├── dashboard.html
 │   ├── manage_inventory.html
@@ -126,21 +156,32 @@ human-centred-inventory-system/
 │   ├── edit_category.html
 │   ├── privacy_notice.html
 │   └── report_download.html
-│
 ├── static/
 │   ├── CSS/
 │   └── js/
-│
 ├── database/
 │   └── retail_inventory_db.sql
-│
+├── screenshots/
+│   ├── dashboard-overview.png
+│   ├── login-overview.png
+│   ├── registration.png
+│   ├── manage-inventory.png
+│   ├── manage-inventory2.png
+│   ├── stock-report.png
+│   └── user-profile.png
 └── tests/
     └── test_models.py
 ```
 
----
-
 ## Installation
+
+### Prerequisites
+
+- Python 3
+- MySQL Server
+- `pip`
+
+WeasyPrint may require additional native libraries depending on the operating system.
 
 ### 1. Clone the repository
 
@@ -149,14 +190,23 @@ git clone https://github.com/FeliceParrino/human-centred-inventory-system.git
 cd human-centred-inventory-system
 ```
 
-### 2. Create a virtual environment
+### 2. Create and activate a virtual environment
+
+macOS or Linux:
 
 ```bash
 python3 -m venv .venv
 source .venv/bin/activate
 ```
 
-### 3. Install dependencies
+Windows:
+
+```bash
+python -m venv .venv
+.venv\Scripts\activate
+```
+
+### 3. Install the dependencies
 
 ```bash
 pip install -r requirements.txt
@@ -164,12 +214,16 @@ pip install -r requirements.txt
 
 ### 4. Configure environment variables
 
-Create a `.env` file in the project root using `.env.example` as a template.
+Copy `.env.example` to a new local `.env` file:
 
-Example:
+```bash
+cp .env.example .env
+```
+
+Add your local configuration:
 
 ```env
-SECRET_KEY=your-secret-key
+SECRET_KEY=replace-with-a-random-secret-key
 
 DB_HOST=localhost
 DB_USER=root
@@ -184,15 +238,21 @@ SMTP_PASSWORD=your-email-password
 SMTP_FROM=your-email@example.com
 ```
 
-### 5. Set up the database
+Do not commit the `.env` file or real credentials to GitHub.
 
-Import the SQL file located in:
+### 5. Set up MySQL
+
+Create the database by importing:
 
 ```text
 database/retail_inventory_db.sql
 ```
 
-into MySQL.
+For example:
+
+```bash
+mysql -u root -p < database/retail_inventory_db.sql
+```
 
 ### 6. Run the application
 
@@ -200,23 +260,17 @@ into MySQL.
 python app.py
 ```
 
-Then open:
-
-```text
-http://127.0.0.1:5000
-```
-
----
+Open [http://127.0.0.1:5000](http://127.0.0.1:5000) in a browser.
 
 ## Testing
 
-The project includes unit tests for the main object-oriented components, including:
+The test suite covers:
 
-* Product stock management
-* Purchase transactions
-* Sale transactions
-* Password hashing
-* Password verification
+- Product stock changes
+- Purchase and sale transactions
+- Prevention of sales exceeding available stock
+- Password hashing
+- Password verification
 
 Run the tests with:
 
@@ -224,85 +278,52 @@ Run the tests with:
 python -m unittest tests/test_models.py
 ```
 
----
+## Architecture
 
-## Human-Centred Design
+The application follows a layered structure:
 
-The project follows a human-centred approach inspired by Industry 5.0 and Human Work Interaction Design.
+1. Flask routes handle HTTP requests, sessions and application flow.
+2. Jinja2 templates provide the user interface.
+3. Domain models represent users, products and transactions.
+4. Data-access modules query MySQL and prepare dashboard, inventory, profile and report information.
 
-The purpose of the system is not to remove people from inventory decisions, but to reduce repetitive work and provide clearer information that helps small business workers make better decisions.
+This separation makes the system easier to understand, test and extend.
 
-The interface therefore focuses on:
+## Future AI-Supported Development
 
-* Clear navigation
-* Simple forms
-* Visible feedback
-* Low-stock warnings
-* Accessible business information
-* Reduced manual inventory work
+AI forecasting is a planned development and is **not presented as a completed feature in the current version**.
 
----
+The proposed workflow would use historical sales and stock movements to provide explainable decision support, such as:
 
-## Future Development
+- Demand forecasts
+- Stockout-risk identification
+- Suggested reorder quantities
+- Estimated stock-depletion dates
+- Unusual inventory-pattern detection
+- Confidence notes explaining the basis of each recommendation
 
-A major planned development is the integration of **AI-supported demand forecasting and decision support**.
+Recommendations would remain reviewable rather than automatic:
 
-Future functionality could use historical sales and stock data to:
+> **The system can recommend; the business user makes the final decision.**
 
-* Forecast future product demand
-* Identify potential stockout risks
-* Suggest reorder quantities
-* Detect unusual stock patterns
-* Support inventory planning
+Possible later developments also include barcode scanning, cloud deployment, role-based access, automated low-stock notifications and supplier management.
 
-The intended approach remains human-centred:
+## Project Status
 
-> **AI should support the decision, not replace the person making it.**
+The current version is a functional academic and portfolio project intended for local demonstration and further development. It should not be treated as production-ready software without additional security review, deployment hardening, accessibility testing and operational monitoring.
 
-AI-generated recommendations would therefore be presented as decision support, with the final decision remaining with the business user.
-
-Other possible future developments include:
-
-* Barcode scanning
-* Cloud deployment
-* More advanced analytics
-* Role-based user access
-* Automated low-stock notifications
-* Supplier management
-* Improved reporting and forecasting
-
----
-
-## Award
-
-This project was presented as:
-
-**Human-Centred Retail Inventory Management System for Small Businesses**
-
-at the **Human Work Interaction Design (HWID) Conference** at the University of West London.
-
-The project received:
-
-**Best Poster Award – First Place**
-
----
-
-## License
+## Usage and Copyright
 
 Copyright © 2026 Felice Parrino. All rights reserved.
 
-This project is publicly available for portfolio and demonstration purposes only.
+The source code is publicly visible for portfolio and evaluation purposes. No permission is granted to copy, modify, redistribute, sublicense, sell or use the software commercially without prior written permission from the author.
 
-No permission is granted to copy, modify, distribute, sublicense, sell, or use this software for commercial purposes without prior written permission from the author.
-
----
+No open-source licence is granted.
 
 ## Author
 
-**Felice Parrino**
+**Felice Parrino**  
+Computer Science Student — London, United Kingdom
 
-Computer Science Student
-London, United Kingdom
-
-GitHub: FeliceParrino
-LinkedIn: [in/felice-parrino-b43940259](https://www.linkedin.com/in/felice-parrino-b43940259/)
+- GitHub: [FeliceParrino](https://github.com/FeliceParrino)
+- LinkedIn: [Felice Parrino](https://www.linkedin.com/in/felice-parrino-b43940259/)
